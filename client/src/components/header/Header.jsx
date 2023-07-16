@@ -1,7 +1,7 @@
 import{AppBar, Toolbar, styled,Typography, Box} from '@mui/material';
 //components
 import Search from './Search';
-import CustomerButtons from './CustomButtons';
+import CustomerButtons from './CustomerButtons';
 
 
 const StyledHeader = styled(AppBar)`
