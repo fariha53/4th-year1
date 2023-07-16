@@ -27,7 +27,8 @@ front-weight:600;
 const CustomerButtons = ()=>{
 
    const [open, setOpen]=useState(false);
-   const {account}=useContext(DataContext);
+  
+   const { account, setAccount } = useContext(DataContext);
    
 
    const openDialog =()=>{
@@ -38,10 +39,10 @@ const CustomerButtons = ()=>{
 
        <Wrapper >
          
-         {
-                account ? <Profile account={account}  /> :
-                <LoginButton variant="contained" onClick={() => openDialog()}>Login</LoginButton>
 
+           {
+                account ? <Profile account={account} setAccount={setAccount} /> :
+                    <LoginButton variant="contained" onClick={() => openDialog()}>Login</LoginButton>
                 
             }
                 
