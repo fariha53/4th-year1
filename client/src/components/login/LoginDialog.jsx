@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
  
 import { Box, Dialog,TextField,Button, Typography,styled} from "@mui/material"; 
 
-import {authenticateSignup} from '../../service/api';
+import {authenticateLogin, authenticateSignup} from '../../service/api';
 
 import { DataContext } from '../../context/DataProvider';
 
@@ -58,6 +58,14 @@ const CreateAccount = styled(Typography)`
     font-size: 14px;
     cursor: pointer
 `
+
+const Error = styled(Typography)`
+    font-size: 10px;
+    color: #ff6161;
+    line-height: 0;
+    margin-top: 10px;
+    font-weight: 600;
+`
 const accountInitialValues = {
     login :{
         View:'login',
@@ -82,17 +90,28 @@ const signupInitialValues = {
     password: '',
     phone: ''
 };
+
+const loginInitialValues = {
+    username: '',
+    password: ''
+};
+
 const LoginDialog =({open,setOpen}) =>{
 
 
 const [account, toggleAccount]= useState(accountInitialValues.login);
 const [ signup, setSignup ] = useState(signupInitialValues);
+const [ login, setLogin ] = useState(loginInitialValues);
+const [ error, showError] = useState(false);
+
 const {  setAccount } = useContext(DataContext);
+
 
 
 const handleClose =()=>{
     setOpen(false);
     toggleAccount(accountInitialValues.login);
+    
 }
 
 const toggleSignup = () => {
@@ -111,7 +130,22 @@ const signupUser =async() => {
         setAccount(signup.username);
     
    
-    
+
+}
+
+const loginUser = async() => {
+    let response = await authenticateLogin(login);
+    if(!response) 
+        showError(true);
+    else {
+        showError(false);
+        handleClose();
+        setAccount(login.username);
+    }
+}
+
+const onValueChange = (e) => {
+    setLogin({ ...login, [e.target.name]: e.target.value });
 }
 
     return(
@@ -127,10 +161,11 @@ const signupUser =async() => {
                 {  account.View ==='login' ?
                 <Wrapper>
 
-             <TextField variant="standard" label="Enter Email/mobile number"/>
-             <TextField variant="standard" label="Enter password"/>
+             <TextField variant="standard"  onChange={(e) => onValueChange(e)} name='username'label="Enter Email/mobile number"/>
+             { error && <Error>Please enter valid Email ID/Mobile number</Error> }
+             <TextField variant="standard" onChange={(e) => onValueChange(e)} name='password' label="Enter password"/>
              <Text>By continuing, you agree to our's Terms of Use and Privacy Policy.</Text>
-             <LoginButton>Login</LoginButton>
+             <LoginButton onClick={() => loginUser()}>Login</LoginButton>
              <Typography style={{textAlign:'center'}}>OR</Typography>
              <RequestOTP>Reset OTP</RequestOTP>
              <CreateAccount onClick={() => toggleSignup()}>New to GenZquest? Create an account</CreateAccount>
