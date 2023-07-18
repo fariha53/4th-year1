@@ -133,14 +133,20 @@ const signupUser =async() => {
 
 }
 
-const loginUser = async() => {
-    let response = await authenticateLogin(login);
-    if(!response) 
-        showError(true);
-    else {
-        showError(false);
-        handleClose();
-        setAccount(login.username);
+const loginUser = async () => {
+    let response = await API.userLogin(login);
+    if (response.isSuccess) {
+        showError('');
+
+        sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+        sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+        setAccount({ name: response.data.name, username: response.data.username });
+        
+        isUserAuthenticated(true)
+        setLogin(loginInitialValues);
+       
+    } else {
+        showError('Something went wrong! please try again later');
     }
 }
 
