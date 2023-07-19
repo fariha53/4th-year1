@@ -123,14 +123,17 @@ const onInputChange = (e) => {
     
 }
 
-const signupUser =async() => {
-    let response = await authenticateSignup(signup);
-    if(!response) return;
-        handleClose();
-        setAccount(signup.username);
-    
-   
 
+
+const signupUser = async () => {
+    let response = await API.userSignup(signup);
+    if (response.isSuccess) {
+        showError('');
+        setSignup(signupInitialValues);
+        toggleAccount('login');
+    } else {
+        showError('Something went wrong! please try again later');
+    }
 }
 
 const loginUser = async() => {
