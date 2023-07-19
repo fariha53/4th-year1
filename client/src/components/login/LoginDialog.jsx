@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Box, Dialog,TextField,Button, Typography,styled} from "@mui/material"; 
 
 import {authenticateLogin, authenticateSignup} from '../../service/api';
-
+import{API} from '../../service/api' 
 import { DataContext } from '../../context/DataProvider';
 
 const Component= styled(Box)`
@@ -133,20 +133,14 @@ const signupUser =async() => {
 
 }
 
-const loginUser = async () => {
-    let response = await API.userLogin(login);
-    if (response.isSuccess) {
-        showError('');
-
-        sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
-        sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
-        setAccount({ name: response.data.name, username: response.data.username });
-        
-        isUserAuthenticated(true)
-        setLogin(loginInitialValues);
-       
-    } else {
-        showError('Something went wrong! please try again later');
+const loginUser = async() => {
+    let response = await authenticateLogin(login);
+    if(!response) 
+        showError(true);
+    else {
+        showError(false);
+        handleClose();
+        setAccount(login.username);
     }
 }
 
