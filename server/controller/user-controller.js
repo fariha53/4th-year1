@@ -1,25 +1,17 @@
+import User from '../model/user.js';
 
 
-
-export const userSignUp = async (request, response) => {
- 
-    try{
-        console.log(request.body);
-
-    }
-    catch(error){
+export const singupUser = async (request, response) => {
+    try {
         
 
-    }
-}
-export const userLogin  = async (request, response) => {
- 
-    try{
-        console.log(request.body);
+        const user = request.body;
 
-    }
-    catch(error){
-        
+        const newUser = new User(user);
+        await newUser.save();
 
+        return response.status(200).json({ msg: 'Signup successfull' });
+    } catch (error) {
+        return response.status(500).json({ msg: 'Error while signing up user' });
     }
 }
