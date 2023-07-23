@@ -13,7 +13,7 @@ const Image = styled(Box)`
   height: 83%;
   width: 40%;
   padding: 45px 35px;
-  & > h5,& > p{
+  & > h5, & > p {
     color: #FFF;
   }
 `;
@@ -23,7 +23,7 @@ const Wrapper = styled(Box)`
   flex-direction: column;
   padding: 25px 35px;
   flex: 1;
-  & > div, & > button, & > p{
+  & > div, & > button, & > p {
     margin-top: 20px;
     font-weight: 600;
   }
@@ -55,7 +55,7 @@ const CreateAccount = styled(Typography)`
   color: #20b2aa;
   font-weight: 600;
   font-size: 14px;
-  cursor: pointer
+  cursor: pointer;
 `;
 
 const Error = styled(Typography)`
@@ -110,11 +110,11 @@ const LoginDialog = ({ open, setOpen }) => {
   const handleClose = () => {
     setOpen(false);
     toggleAccount(accountInitialValues.login);
-  }
+  };
 
   const toggleSignup = () => {
     toggleAccount(accountInitialValues.signup);
-  }
+  };
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
@@ -125,7 +125,7 @@ const LoginDialog = ({ open, setOpen }) => {
       // Otherwise, update the field as usual.
       setSignup({ ...signup, [name]: value });
     }
-  }
+  };
 
   const validateSignup = () => {
     const errors = {};
@@ -147,6 +147,10 @@ const LoginDialog = ({ open, setOpen }) => {
       errors.password = "Password is required";
     } else if (signup.password.length < 6) {
       errors.password = "Password must be at least 6 characters long";
+    } else if (!/\d/.test(signup.password)) {
+      errors.password = "Password must contain at least one number";
+    } else if (!/[!@#$%^&*]/.test(signup.password)) {
+      errors.password = "Password must contain at least one special character";
     }
     if (!signup.confirmPassword) {
       errors.confirmPassword = "Confirm Password is required";
@@ -160,7 +164,7 @@ const LoginDialog = ({ open, setOpen }) => {
     }
     setSignupErrors(errors);
     return Object.keys(errors).length === 0; // Return true if there are no errors
-  }
+  };
 
   const signupUser = async () => {
     if (validateSignup()) {
@@ -169,7 +173,7 @@ const LoginDialog = ({ open, setOpen }) => {
       handleClose();
       setAccount(signup.username);
     }
-  }
+  };
 
   const validateLogin = () => {
     const errors = {};
@@ -181,7 +185,7 @@ const LoginDialog = ({ open, setOpen }) => {
     }
     setSignupErrors(errors);
     return Object.keys(errors).length === 0; // Return true if there are no errors
-  }
+  };
 
   const loginUser = async () => {
     if (validateLogin()) {
@@ -194,7 +198,7 @@ const LoginDialog = ({ open, setOpen }) => {
         setError(true);
       }
     }
-  }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} PaperProps={{ sx: { maxWidth: 'unset' } }}>
@@ -212,7 +216,7 @@ const LoginDialog = ({ open, setOpen }) => {
               {signupErrors.password && <Error>{signupErrors.password}</Error>}
               <Text>By continuing, you agree to our's Terms of Use and Privacy Policy.</Text>
               <LoginButton onClick={loginUser}>Login</LoginButton>
-              <Typography>OR</Typography>
+              <Typography style={{textAlign:'center'}}>OR</Typography>
               <RequestOTP>Reset OTP</RequestOTP>
               <CreateAccount onClick={toggleSignup}>New to GenZquest? Create an account</CreateAccount>
             </Wrapper>
